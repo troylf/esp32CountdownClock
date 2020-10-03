@@ -5,6 +5,8 @@ set(COMPONENT_PRIV_REQUIRES )
 set(COMPONENT_SRCS "main.cpp"
 	"spiInit.c" 
 	"MatrixDisplay.cpp"
+	"MatrixChars.cpp"
+	"Countdown.cpp"
 	)
 set(COMPONENT_ADD_INCLUDEDIRS "")
 

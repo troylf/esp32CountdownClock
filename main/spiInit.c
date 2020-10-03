@@ -21,7 +21,7 @@ void InitSpi(spi_bus_config_t* returnBus, spi_device_interface_config_t* returnC
 	spi_device_interface_config_t devcfg={
 		.command_bits = 0,
 		.address_bits = 0,
-		.clock_speed_hz=1*1000*1000,       //Clock out at 10 MHz
+		.clock_speed_hz=5*1000*1000,       //Clock out at 10 MHz
 		.mode=0,                            //SPI mode 0
 		.spics_io_num = 12,             	//CS pin
 		.queue_size=7,                      //We want to be able to queue 7 transactions at a time

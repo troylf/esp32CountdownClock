@@ -118,10 +118,10 @@ public:
 	  0x0E,
 	  0x11,
 	  0x11,
-	  0x0E,
+	  0b00001111,
 	  0x01,
-	  0x11,
-	  0x0E
+	  0b00000001,
+	  0b00000001
 	};
 
 	MatrixChar zero =
@@ -145,6 +145,8 @@ public:
 	  0,
 	  0
 	};
+
+	const unsigned char * digetToMatrix(int num);
 
 } DisplayChars;
 

@@ -12,6 +12,7 @@ extern "C" {
 
 #include "MatrixDisplay.h"
 #include "MatrixChars.h"
+#include "Countdown.h"
 
 #define LCD_HOST    SPI2_HOST
 #define DMA_CHAN    LCD_HOST
@@ -21,32 +22,32 @@ esp_err_t event_handler(void *ctx, system_event_t *event)
     return ESP_OK;
 }
 
-const unsigned char * digetToMatrix(int num){
-  num = num % 10;
-  switch(num){
-    case 0:
-      return DisplayChars.zero;
-    case 1:
-      return DisplayChars.one;
-    case 2:
-      return DisplayChars.two;
-    case 3:
-      return DisplayChars.three;
-    case 4:
-      return DisplayChars.four;
-    case 5:
-      return DisplayChars.five;
-    case 6:
-      return DisplayChars.six;
-    case 7:
-      return DisplayChars.seven;
-    case 8:
-      return DisplayChars.eight;
-    case 9:
-      return DisplayChars.nine;
-    default:
-      return DisplayChars.blank;
+void displaySeconds(MatrixDisplay* disp, int numDots){
+  for(int i=0; i < disp->numDisplays; i++){
+    disp->buffer[i][7] = 0;
   }
+
+  int dotCount=numDots;
+  for(int i=1; i < disp->numDisplays*8; i++){
+    if( dotCount>0 ){
+      disp->buffer[i/8][7] |= 0x01<<(i%8);
+      dotCount--;
+    }
+  }
+}
+
+void displayClock(MatrixDisplay* disp, Countdown* countdown){
+  int minutes = countdown->minutes;
+  int hours = countdown->hours;
+  disp->setSegment(0,DisplayChars.digetToMatrix(minutes));
+  disp->setSegment(1,DisplayChars.digetToMatrix(minutes/10));
+  disp->setSegment(2,DisplayChars.digetToMatrix(hours));
+  disp->setSegment(3,(hours>10)?DisplayChars.digetToMatrix(hours/10):DisplayChars.blank);
+
+  displaySeconds(disp, (countdown->seconds+1)/2);
+
+  disp->sendBuffer();
+
 }
 
 extern "C" void app_main(void)
@@ -81,22 +82,23 @@ extern "C" void app_main(void)
 	ESP_ERROR_CHECK(ret);
 
 	MatrixDisplay display = MatrixDisplay(spi, 4);
+	display.setColon(1, true);
+
+	Countdown countdown = Countdown();
+
+	countdown.hours=2;
 
     gpio_set_direction(GPIO_NUM_2, GPIO_MODE_OUTPUT);
     int level = 0;
-    int number = 0;
+
     while (true) {
-    	display.setSegment(0, digetToMatrix(number));
-    	display.sendBuffer();
-    	number++;
-    	if( number >= 10)
-    	{
-    		number=0;
-    	}
+    	displayClock(&display, &countdown);
 
         gpio_set_level(GPIO_NUM_2, level);
         level = !level;
         vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+        countdown--;
     }
 }
 
