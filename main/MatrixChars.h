@@ -1,0 +1,151 @@
+/*
+ * MatrixChars.h
+ *
+ *  Created on: Sep 24, 2020
+ *      Author: Troy
+ */
+
+#ifndef MAIN_MATRIXCHARS_H_
+#define MAIN_MATRIXCHARS_H_
+
+#define MATRIXCHAR_LENGTH 7
+typedef const unsigned char MatrixChar[MATRIXCHAR_LENGTH];
+
+static class DispChr{
+
+public:
+	MatrixChar heart =
+	{
+	  0x66,
+	  0xFF,
+	  0xFF,
+	  0xFF,
+	  0x7E,
+	  0x3C,
+	  0x18
+	};
+
+	MatrixChar one =
+	{
+	  0x04,
+	  0x0C,
+	  0x14,
+	  0x04,
+	  0x04,
+	  0x04,
+	  0x1F
+	};
+
+	MatrixChar two =
+	{
+	  0x0E,
+	  0x11,
+	  0x01,
+	  0x02,
+	  0x04,
+	  0x08,
+	  0x1F
+	};
+
+	MatrixChar three =
+	{
+	  0x0E,
+	  0x11,
+	  0x01,
+	  0x0E,
+	  0x01,
+	  0x11,
+	  0x0E
+	};
+
+	MatrixChar four =
+	{
+	  0x02,
+	  0x06,
+	  0x0A,
+	  0x12,
+	  0x1F,
+	  0x02,
+	  0x02
+	};
+
+	MatrixChar five =
+	{
+	  0x1F,
+	  0x10,
+	  0x1E,
+	  0x01,
+	  0x01,
+	  0x11,
+	  0x0E
+	};
+
+	MatrixChar six =
+	{
+	  0x0E,
+	  0x11,
+	  0x10,
+	  0x1E,
+	  0x11,
+	  0x11,
+	  0x0E
+	};
+
+	MatrixChar seven =
+	{
+	  0x1F,
+	  0x01,
+	  0x02,
+	  0x04,
+	  0x08,
+	  0x08,
+	  0x08
+	};
+
+	MatrixChar eight =
+	{
+	  0x0E,
+	  0x11,
+	  0x11,
+	  0x0E,
+	  0x11,
+	  0x11,
+	  0x0E
+	};
+
+	MatrixChar nine =
+	{
+	  0x0E,
+	  0x11,
+	  0x11,
+	  0x0E,
+	  0x01,
+	  0x11,
+	  0x0E
+	};
+
+	MatrixChar zero =
+	{
+	  0x0E,
+	  0x11,
+	  0x13,
+	  0x15,
+	  0x19,
+	  0x11,
+	  0b00001110
+	};
+
+	MatrixChar blank =
+	{
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0
+	};
+
+} DisplayChars;
+
+#endif /* MAIN_MATRIXCHARS_H_ */
