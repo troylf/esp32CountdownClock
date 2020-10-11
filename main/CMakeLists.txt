@@ -7,6 +7,7 @@ set(COMPONENT_SRCS "main.cpp"
 	"MatrixDisplay.cpp"
 	"MatrixChars.cpp"
 	"Countdown.cpp"
+	"Wifi.c"
 	)
 set(COMPONENT_ADD_INCLUDEDIRS "")
 
