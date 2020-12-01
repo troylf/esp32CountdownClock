@@ -9,12 +9,11 @@ extern "C" {
 	#include "driver/gpio.h"
 	#include <string.h>
 	#include "spiInit.h"
-	#include "Wifi.h"
+	#include "MatrixChars.h"
+	#include "Countdown.h"
 }
 
 #include "MatrixDisplay.h"
-#include "MatrixChars.h"
-#include "Countdown.h"
 
 #define LCD_HOST    SPI2_HOST
 #define DMA_CHAN    LCD_HOST
@@ -41,10 +40,10 @@ void displaySeconds(MatrixDisplay* disp, int numDots){
 void displayClock(MatrixDisplay* disp, Countdown* countdown){
   int minutes = countdown->minutes;
   int hours = countdown->hours;
-  disp->setSegment(0,DisplayChars.digetToMatrix(minutes));
-  disp->setSegment(1,DisplayChars.digetToMatrix(minutes/10));
-  disp->setSegment(2,DisplayChars.digetToMatrix(hours));
-  disp->setSegment(3,(hours>10)?DisplayChars.digetToMatrix(hours/10):DisplayChars.blank);
+  disp->setSegment(0,digetToMatrix(minutes));
+  disp->setSegment(1,digetToMatrix(minutes/10));
+  disp->setSegment(2,digetToMatrix(hours));
+  disp->setSegment(3,(hours>10)?digetToMatrix(hours/10):DisplayChars.blank);
 
   displaySeconds(disp, (countdown->seconds+1)/2);
 
@@ -69,8 +68,6 @@ extern "C" void app_main(void)
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
-    connectToWifi((char *)"", (char *)"");
-
 	esp_err_t ret;
 	spi_device_handle_t spi;
 	spi_bus_config_t buscfg;
@@ -88,7 +85,8 @@ extern "C" void app_main(void)
 	MatrixDisplay display = MatrixDisplay(spi, 4);
 	display.setColon(1, true);
 
-	Countdown countdown = Countdown();
+	Countdown countdown;
+	Countdown_init(&countdown);
 
 	countdown.hours=2;
 
@@ -102,7 +100,7 @@ extern "C" void app_main(void)
         level = !level;
         vTaskDelay(1000 / portTICK_PERIOD_MS);
 
-        countdown--;
+        Countdown_decrementByOneSec(&countdown);
     }
 }
 

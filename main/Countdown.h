@@ -10,17 +10,16 @@
 
 #include "Types.h"
 
-class Countdown{
-  public:
+typedef struct{
     u16 hours;
     u16 minutes;
     u16 seconds;
+} Countdown;
 
-    Countdown();
-	Countdown* operator--(int);
-	void decrementByOneSec();
-	void decrementByOneMin();
-    void decrementByOneHour();
-};
+
+void Countdown_init(Countdown* clock);
+void Countdown_decrementByOneSec(Countdown* clock);
+void Countdown_decrementByOneMin(Countdown* clock);
+void Countdown_decrementByOneHour(Countdown* clock);
 
 #endif /* MAIN_COUNTDOWN_CPP_ */

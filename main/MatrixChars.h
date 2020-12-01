@@ -11,10 +11,24 @@
 #define MATRIXCHAR_LENGTH 7
 typedef const unsigned char MatrixChar[MATRIXCHAR_LENGTH];
 
-static class DispChr{
+typedef struct {
+	MatrixChar heart;
+	MatrixChar one;
+	MatrixChar two;
+	MatrixChar three;
+	MatrixChar four;
+	MatrixChar five;
+	MatrixChar six;
+	MatrixChar seven;
+	MatrixChar eight;
+	MatrixChar nine;
+	MatrixChar zero;
+	MatrixChar blank;
+} DisplayCharsType;
 
-public:
-	MatrixChar heart =
+static const DisplayCharsType DisplayChars = 
+{
+	.heart =
 	{
 	  0x66,
 	  0xFF,
@@ -23,9 +37,9 @@ public:
 	  0x7E,
 	  0x3C,
 	  0x18
-	};
+	},
 
-	MatrixChar one =
+	.one =
 	{
 	  0x04,
 	  0x0C,
@@ -34,9 +48,9 @@ public:
 	  0x04,
 	  0x04,
 	  0x1F
-	};
+	},
 
-	MatrixChar two =
+	.two =
 	{
 	  0x0E,
 	  0x11,
@@ -45,9 +59,9 @@ public:
 	  0x04,
 	  0x08,
 	  0x1F
-	};
+	},
 
-	MatrixChar three =
+	.three =
 	{
 	  0x0E,
 	  0x11,
@@ -56,9 +70,9 @@ public:
 	  0x01,
 	  0x11,
 	  0x0E
-	};
+	},
 
-	MatrixChar four =
+	.four =
 	{
 	  0x02,
 	  0x06,
@@ -67,9 +81,9 @@ public:
 	  0x1F,
 	  0x02,
 	  0x02
-	};
+	},
 
-	MatrixChar five =
+	.five =
 	{
 	  0x1F,
 	  0x10,
@@ -78,9 +92,9 @@ public:
 	  0x01,
 	  0x11,
 	  0x0E
-	};
+	},
 
-	MatrixChar six =
+	.six =
 	{
 	  0x0E,
 	  0x11,
@@ -89,9 +103,9 @@ public:
 	  0x11,
 	  0x11,
 	  0x0E
-	};
+	},
 
-	MatrixChar seven =
+	.seven =
 	{
 	  0x1F,
 	  0x01,
@@ -100,9 +114,9 @@ public:
 	  0x08,
 	  0x08,
 	  0x08
-	};
+	},
 
-	MatrixChar eight =
+	.eight =
 	{
 	  0x0E,
 	  0x11,
@@ -111,9 +125,9 @@ public:
 	  0x11,
 	  0x11,
 	  0x0E
-	};
+	},
 
-	MatrixChar nine =
+	.nine =
 	{
 	  0x0E,
 	  0x11,
@@ -122,9 +136,9 @@ public:
 	  0x01,
 	  0b00000001,
 	  0b00000001
-	};
+	},
 
-	MatrixChar zero =
+	.zero =
 	{
 	  0x0E,
 	  0x11,
@@ -133,9 +147,9 @@ public:
 	  0x19,
 	  0x11,
 	  0b00001110
-	};
+	},
 
-	MatrixChar blank =
+	.blank =
 	{
 	  0,
 	  0,
@@ -144,10 +158,9 @@ public:
 	  0,
 	  0,
 	  0
-	};
+	}
+};
 
-	const unsigned char * digetToMatrix(int num);
-
-} DisplayChars;
+const unsigned char * digetToMatrix(int num);
 
 #endif /* MAIN_MATRIXCHARS_H_ */
