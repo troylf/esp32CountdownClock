@@ -2,9 +2,9 @@
 set(COMPONENT_REQUIRES )
 set(COMPONENT_PRIV_REQUIRES )
 
-set(COMPONENT_SRCS "main.cpp"
+set(COMPONENT_SRCS "main.c"
 	"spiInit.c" 
-	"MatrixDisplay.cpp"
+	"MatrixDisplay.c"
 	"MatrixChars.c"
 	"Countdown.c"
 	)

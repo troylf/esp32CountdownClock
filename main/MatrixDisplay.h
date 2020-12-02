@@ -10,43 +10,33 @@
 
 #include "Types.h"
 #include "MatrixChars.h"
-extern "C" {
-	#include "driver/spi_master.h"
-}
+#include "driver/spi_master.h"
 
-class MatrixDisplay{
-  private:
-    static const int maxDisplays = 8;
-    static const u8 charMask = 0x1F;
-    static const u8 symbolMask = 0xE0;
-    const spi_device_handle_t spi;
+#define MatrixDisp_maxDisplays 8
+#define MatrixDisp_numRows     8
 
-    enum command {
-      decodeModeReg = 0x09,
-      intensityReg = 0x0a,
-      scanLimitReg = 0x0b,
-      shutdownReg = 0x0c,
-      dispTestReg = 0x0f
-    };
+typedef struct MatrixDisplay{
+  const spi_device_handle_t spi;
+  const int numDisplays;
+  u8 buffer[MatrixDisp_maxDisplays][MatrixDisp_numRows];
+} MatrixDisplay;
 
-    void sendRow( u8 row );
-    void sendSpiCommand(void* data, u32 sizeInBytes);
-
-  public:
-    const int numDisplays;
-    static const u8 numRows = 8;
-    u8 buffer[maxDisplays][numRows];
-
-    MatrixDisplay(spi_device_handle_t spi, int numberOfDisplays);
-    void blankScreen();
-    void setColon(u8 segmentNumber, bool isOn);
-    void setSegment(u8 segmentNumber, const MatrixChar symbol);
-    void setIntensity(u8 intensity);
-    void sendEmptyCommand();
-    void sendBuffer();
-    void sendCommand(u8 reg, u8 value);
+enum MatrixDisp_command {
+  MDCommand_decodeModeReg = 0x09,
+  MDCommand_intensityReg = 0x0a,
+  MDCommand_scanLimitReg = 0x0b,
+  MDCommand_shutdownReg = 0x0c,
+  MDCommand_dispTestReg = 0x0f
 };
 
+void MatrixDisp_init(MatrixDisplay* disp, spi_device_handle_t spi, int numberOfDisplays);
+void MatrixDisp_blankScreen(MatrixDisplay* disp);
+void MatrixDisp_setColon(MatrixDisplay* disp, u8 segmentNumber, bool isOn);
+void MatrixDisp_setSegment(MatrixDisplay* disp, u8 segmentNumber, const MatrixChar symbol);
+void MatrixDisp_setIntensity(MatrixDisplay* disp, u8 intensity);
+void MatrixDisp_sendEmptyCommand(MatrixDisplay* disp);
+void MatrixDisp_sendBuffer(MatrixDisplay* disp);
+void MatrixDisp_sendCommand(MatrixDisplay* disp, u8 reg, u8 value);
 
 
 #endif /* MAIN_MATRIXDISPLAY_H_ */

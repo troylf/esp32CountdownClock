@@ -134,8 +134,8 @@ static const DisplayCharsType DisplayChars =
 	  0x11,
 	  0b00001111,
 	  0x01,
-	  0b00000001,
-	  0b00000001
+	  0b00010001,
+	  0b00001110
 	},
 
 	.zero =

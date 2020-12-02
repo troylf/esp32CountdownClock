@@ -1,18 +1,15 @@
-extern "C" {
-	#include "freertos/FreeRTOS.h"
-	#include "esp_wifi.h"
-	#include "esp_system.h"
-	#include "esp_event.h"
-	#include "esp_log.h"
-	#include "nvs_flash.h"
-	#include "driver/spi_master.h"
-	#include "driver/gpio.h"
-	#include <string.h>
-	#include "spiInit.h"
-	#include "MatrixChars.h"
-	#include "Countdown.h"
-}
-
+#include "freertos/FreeRTOS.h"
+#include "esp_wifi.h"
+#include "esp_system.h"
+#include "esp_event.h"
+#include "esp_log.h"
+#include "nvs_flash.h"
+#include "driver/spi_master.h"
+#include "driver/gpio.h"
+#include <string.h>
+#include "spiInit.h"
+#include "MatrixChars.h"
+#include "Countdown.h"
 #include "MatrixDisplay.h"
 
 #define LCD_HOST    SPI2_HOST
@@ -40,14 +37,14 @@ void displaySeconds(MatrixDisplay* disp, int numDots){
 void displayClock(MatrixDisplay* disp, Countdown* countdown){
   int minutes = countdown->minutes;
   int hours = countdown->hours;
-  disp->setSegment(0,digetToMatrix(minutes));
-  disp->setSegment(1,digetToMatrix(minutes/10));
-  disp->setSegment(2,digetToMatrix(hours));
-  disp->setSegment(3,(hours>10)?digetToMatrix(hours/10):DisplayChars.blank);
+  MatrixDisp_setSegment(disp, 0,digetToMatrix(minutes));
+  MatrixDisp_setSegment(disp, 1,digetToMatrix(minutes/10));
+  MatrixDisp_setSegment(disp, 2,digetToMatrix(hours));
+  MatrixDisp_setSegment(disp, 3,(hours>10)?digetToMatrix(hours/10):DisplayChars.blank);
 
   displaySeconds(disp, (countdown->seconds+1)/2);
 
-  disp->sendBuffer();
+  MatrixDisp_sendBuffer(disp);
 
 }
 
@@ -62,7 +59,7 @@ void initNVS(void)
 	ESP_ERROR_CHECK(ret);
 }
 
-extern "C" void app_main(void)
+void app_main(void)
 {
 	initNVS();
     ESP_ERROR_CHECK(esp_netif_init());
@@ -82,8 +79,9 @@ extern "C" void app_main(void)
 	ret=spi_bus_add_device(LCD_HOST, &devcfg, &spi);
 	ESP_ERROR_CHECK(ret);
 
-	MatrixDisplay display = MatrixDisplay(spi, 4);
-	display.setColon(1, true);
+	MatrixDisplay display;
+	MatrixDisp_init(&display, spi, 4);
+	MatrixDisp_setColon(&display, 1, true);
 
 	Countdown countdown;
 	Countdown_init(&countdown);
