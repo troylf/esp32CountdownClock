@@ -6,6 +6,7 @@
  */
 
 #include "MatrixDisplay.h"
+#include "phy.h"
 #include <string.h>
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -15,41 +16,27 @@
 static const u8 charMask = 0x1F;
 static const u8 symbolMask = 0xE0;
 
-void MatrixDisp_sendSpiCommand(MatrixDisplay* disp, void* data, u32 sizeInBytes){
-	esp_err_t ret;
-	spi_transaction_t t;
-	memset(&t, 0, sizeof(t));       //Zero out the transaction
-	t.length=sizeInBytes*8;
-	t.tx_buffer=data;               //The data is the cmd itself
-//	t.flags
-//	t.user=(void*)0;                //D/C needs to be set to 0
-	ret=spi_device_polling_transmit(disp->spi, &t);  //Transmit!
-	assert(ret==ESP_OK);            //Should have had no issues.
-//  shiftOut(toSend);
-}
-
 void MatrixDisp_sendRow(MatrixDisplay* disp, u8 row ){
-    if( row > MatrixDisp_numRows ) return;
+  if( row > MatrixDisp_numRows ) return;
 
-    u16 numberOfSendingBytes = disp->numDisplays*2;
-    u8 toSend[numberOfSendingBytes];
+  u16 numberOfSendingBytes = disp->numDisplays*2;
+  u8 toSend[numberOfSendingBytes];
 
-    for(int i=0; i < numberOfSendingBytes/2; i++)
-    {
-    	toSend[i*2] = row;
-    	toSend[(i*2)+1] = disp->buffer[(numberOfSendingBytes/2-1)-i][row-1];
-    }
+  for(int i=0; i < numberOfSendingBytes/2; i++)
+  {
+  	toSend[i*2] = row;
+  	toSend[(i*2)+1] = disp->buffer[(numberOfSendingBytes/2-1)-i][row-1];
+  }
 
-	MatrixDisp_sendSpiCommand(disp, toSend, numberOfSendingBytes);
+	PHY_DisplayBus_sendCommand(toSend, numberOfSendingBytes);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // public
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void MatrixDisp_init(MatrixDisplay* disp, spi_device_handle_t spi, int numberOfDisplays){
+void MatrixDisp_init(MatrixDisplay* disp, int numberOfDisplays){
   
-  *(spi_device_handle_t*)&(disp->spi) = spi;
   *(int*)&(disp->numDisplays) = numberOfDisplays;
 
   memset(disp->buffer, 0, MatrixDisp_maxDisplays*MatrixDisp_numRows );
@@ -110,7 +97,7 @@ void MatrixDisp_setIntensity(MatrixDisplay* disp, u8 intensity){
 		intensityArray[i] = intensity;
 	}
 
-	MatrixDisp_sendSpiCommand(disp, &intensityArray, bufferLength);
+	PHY_DisplayBus_sendCommand(&intensityArray, bufferLength);
 
 }
 
@@ -133,7 +120,7 @@ void MatrixDisp_sendCommand(MatrixDisplay* disp, u8 reg, u8 value)
 {
 	u8 toSend[2] = {reg, value};
 
-	MatrixDisp_sendSpiCommand(disp, toSend, 2);
+	PHY_DisplayBus_sendCommand(toSend, 2);
 }
 
 

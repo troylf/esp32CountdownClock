@@ -1,24 +1,14 @@
 #include "freertos/FreeRTOS.h"
-#include "esp_wifi.h"
-#include "esp_system.h"
+#include "driver/gpio.h"
+#include <string.h>
+#include "Countdown.h"
+#include "MatrixDisplay.h"
+#include "phy.h"
+
 #include "esp_event.h"
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "driver/spi_master.h"
-#include "driver/gpio.h"
-#include <string.h>
-#include "spiInit.h"
-#include "MatrixChars.h"
-#include "Countdown.h"
-#include "MatrixDisplay.h"
-
-#define LCD_HOST    SPI2_HOST
-#define DMA_CHAN    LCD_HOST
-
-esp_err_t event_handler(void *ctx, system_event_t *event)
-{
-    return ESP_OK;
-}
 
 void displaySeconds(MatrixDisplay* disp, int numDots){
   for(int i=0; i < disp->numDisplays; i++){
@@ -48,39 +38,12 @@ void displayClock(MatrixDisplay* disp, Countdown* countdown){
 
 }
 
-void initNVS(void)
-{
-	//Initialize NVS
-	esp_err_t ret = nvs_flash_init();
-	if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-	  ESP_ERROR_CHECK(nvs_flash_erase());
-	  ret = nvs_flash_init();
-	}
-	ESP_ERROR_CHECK(ret);
-}
-
 void app_main(void)
 {
-	initNVS();
-    ESP_ERROR_CHECK(esp_netif_init());
-    ESP_ERROR_CHECK(esp_event_loop_create_default());
-
-	esp_err_t ret;
-	spi_device_handle_t spi;
-	spi_bus_config_t buscfg;
-	spi_device_interface_config_t devcfg;
-
-	InitSpi(&buscfg, &devcfg);
-
-	//Initialize the SPI bus
-	ret=spi_bus_initialize(LCD_HOST, &buscfg, DMA_CHAN);
-	ESP_ERROR_CHECK(ret);
-	//Attach the LCD to the SPI bus
-	ret=spi_bus_add_device(LCD_HOST, &devcfg, &spi);
-	ESP_ERROR_CHECK(ret);
+	PHY_init();
 
 	MatrixDisplay display;
-	MatrixDisp_init(&display, spi, 4);
+	MatrixDisp_init(&display, 4);
 	MatrixDisp_setColon(&display, 1, true);
 
 	Countdown countdown;

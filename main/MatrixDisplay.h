@@ -16,7 +16,6 @@
 #define MatrixDisp_numRows     8
 
 typedef struct MatrixDisplay{
-  const spi_device_handle_t spi;
   const int numDisplays;
   u8 buffer[MatrixDisp_maxDisplays][MatrixDisp_numRows];
 } MatrixDisplay;
@@ -29,7 +28,7 @@ enum MatrixDisp_command {
   MDCommand_dispTestReg = 0x0f
 };
 
-void MatrixDisp_init(MatrixDisplay* disp, spi_device_handle_t spi, int numberOfDisplays);
+void MatrixDisp_init(MatrixDisplay* disp, int numberOfDisplays);
 void MatrixDisp_blankScreen(MatrixDisplay* disp);
 void MatrixDisp_setColon(MatrixDisplay* disp, u8 segmentNumber, bool isOn);
 void MatrixDisp_setSegment(MatrixDisplay* disp, u8 segmentNumber, const MatrixChar symbol);

@@ -3,7 +3,7 @@ set(COMPONENT_REQUIRES )
 set(COMPONENT_PRIV_REQUIRES )
 
 set(COMPONENT_SRCS "main.c"
-	"spiInit.c" 
+	"phy.c" 
 	"MatrixDisplay.c"
 	"MatrixChars.c"
 	"Countdown.c"
