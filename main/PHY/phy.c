@@ -11,8 +11,10 @@
 #define DMA_CHAN    LCD_HOST
 
 static spi_device_handle_t displayBus;
-
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Private
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 static void InitSpi()
 {
 	spi_bus_config_t buscfg={
@@ -54,7 +56,10 @@ static void initNVS(void)
 	ESP_ERROR_CHECK(ret);
 }
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Public
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 void PHY_init(void)
 {
 
