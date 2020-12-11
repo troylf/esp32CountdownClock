@@ -38,9 +38,9 @@ endfunction()
 # Script
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 set(project_dirs 
-		"application" 
-		"PHY" 
-		"drivers" 
+		"application/src" 
+		"PHY/src" 
+		"drivers/src" 
 		)
 
 appendModuleSrc( "${project_dirs}" project_dirs )
